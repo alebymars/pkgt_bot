@@ -80,11 +80,6 @@ class Bot
                 $get_params = http_build_query($request_params);
                 file_get_contents('https://api.vk.com/method/messages.markAsRead?'. $get_params);
                 switch (mb_strtolower($msg[0])){
-					/*
-                    case "совет":
-                        $advice = html_entity_decode(json_decode(file_get_contents("http://fucking-great-advice.ru/api/random/censored/random_by_tag/%D1%81%D1%82%D1%83%D0%B4%D0%B5%D0%BD%D1%82%D1%83"))->text);
-                        $this->sendMessage("Случайный совет: ".$advice, $user_id);
-                        break;*/
                     case "штампы":
                         $this->sendMessage($user_id, "Штампы: ", "doc-128463549_464176572,doc-128463549_464176550,doc-128463549_464176459,doc-128463549_464176424");
                         break;
@@ -92,33 +87,6 @@ class Bot
                         $advice = html_entity_decode(json_decode(file_get_contents("http://fucking-great-advice.ru/api/random/random_by_tag/%D1%81%D1%82%D1%83%D0%B4%D0%B5%D0%BD%D1%82%D1%83"))->text);
                         $this->sendMessage("Случайный совет: ".$advice, $user_id);
                         break;
-                    /*case "установить"://костыль для команд с пробелом
-                        if(isset($msg[1]) && mb_strtolower($msg[1]) == "группу"){
-                            if(isset($msg[2]) && $this->isValidGroup($msg[2])){
-                                $stmt = $this->db->prepare("INSERT OR REPLACE INTO groups ('user_id', 'group') VALUES (:user_id, :group);");
-                                $stmt->bindValue(':user_id', (int)$user_id);
-                                $stmt->bindValue(':group', $msg[2]);
-                                $stmt->execute();
-                                $this->sendMessage("Ваша группа изменена на ".$msg[2], $user_id);
-                            }else{
-                                $this->sendMessage("Группа не существует, либо мне неизвестна \nЯ знаю группы: ".implode(", ", $this->groups), $user_id);
-                                return;
-                            }
-                        }
-                        break;
-                    case "моя"://костыль для команд с пробелом
-                        if(isset($msg[1]) && mb_strtolower($msg[1]) == "группа"){
-                            $result = $this->db->query("SELECT * FROM `groups` WHERE user_id = '".$user_id."'");
-                            if($result){
-                                if(!empty(($group = $result->fetchArray()["group"]))){
-                                    $this->sendMessage("Ваша группа:".$group, $user_id);
-                                }else{
-                                    $this->sendMessage("Укажите группу поумолчанию написав мне: установить группу <группа>", $user_id);
-                                    return;
-                                }
-                            }
-                        }
-                        break;*/
                     case "помощь":
                     case "команды":
                         $this->sendMessage($user_id, "Доступные команды:\n".
@@ -256,8 +224,7 @@ class Bot
 
     public function getSchedule(string $group, String $date){
         $group = mb_strtoupper($group);
-        //return "Бот временно не работает. Расписание можете узнать перейдя по ссылке:\n".
-            "http://pkgt.kz/learner/index_m.php?ng=".urlencode($group)."&dat=".$date."&sel=Найти";
+        //return "Бот временно не работает. Расписание можете узнать перейдя по ссылке:\n"."http://pkgt.kz/learner/index_m.php?ng=".urlencode($group)."&dat=".$date."&sel=Найти";
         $html = file_get_html("http://pkgt.kz/index.php?pgn=12&ng=".$group."&dat=".$date."&sel=Найти");
         if($html !== false){
             $trs = $html->find('div[id=contener] tr[!bgcolor]', 0);
